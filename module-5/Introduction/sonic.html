@@ -19,16 +19,44 @@
   </body>
   <script defer>
 
+"CODE HERE___________________________________________________________________________"
+
 const cvs = document.getElementById("cvs");
 const ctx = cvs.getContext("2d");
-ctx.fillStyle = "CYAN";
-ctx.beginPath();
-ctx.moveTo(50, 100);
-ctx.lineTo(250, 100);
-ctx.lineTo(250, 300);
-ctx.closePath();
-ctx.fill();
-ctx.stroke();
+const sonicPath = "sonic_sprite_sheet.png";
+const sonicSheet = new Image ();
+const SonicRunning1 = {x: 0, y: 127, width: 102, height: 121, count: 9}
+
+let frameNumber = 0;
+let posX = 0;
+let hero = SonicRunning1;
+
+function animate(){
+  ctx.clearRect(0, 0, cvs.width, cvs.height);
+   const dx = 0, dy = 100, dw = SonicRunning1.width, dh = SonicRunning1.height
+  const sx = frameNumber * SonicRunning1.width, sy = SonicRunning1.y, sw = SonicRunning1.width, sh = SonicRunning1.height;
+  ctx.drawImage(sonicSheet, sx, sy, sw, sh, dx + posX, dy, dw, dh);
+  frameNumber++;
+  posX+=10;
+  }
+  
+  if(posX < csv.width - SonicRunning1.width){
+    frameNumber++;
+    if(frameNumber >= SonicRunning1.count){
+    frameNumber = 0;
+    posX += 15;}
+  }
+  else{
+      posX = cvs.width - SonicRunning1.width;
+    }
+
+function sonicSheetLoaded(){
+  console.log("Sprite Sheet Loaded!");
+  setInterval(animate, 0.001);
+}
+
+sonicSheet.addEventListener("load", sonicSheetLoaded);
+sonicSheet.src = sonicPath;
 
   </script>
 </html>
