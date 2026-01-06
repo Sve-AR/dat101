@@ -40,7 +40,7 @@
     sonic6: { x: 0, y: 575, width: 102, height: 125, count: 3},
     sonic7: { x: 0, y: 700, width: 102, height: 125, count: 2},
     sonic8: { x: 0, y: 825, width: 102, height: 125, count: 2},
-    sonic9: { x: 0, y: 950, width: 102, height: 125, count: 4}
+    sonic9: { x: 0, y: 955, width: 102, height: 140, count: 4}
   }
     
     //Global variables
@@ -50,6 +50,7 @@
     const hero1 = new TSprite(spcvs, SpriteInfoList.sonic2, 0, 50);
     const hero2 = new TSprite(spcvs, SpriteInfoList.sonic4, 0, 200);
     const hero3 = new TSprite(spcvs, SpriteInfoList.sonic1, 0, 350);
+    const hero4 = new TSprite(spcvs, SpriteInfoList.sonic9, 500, 250);
 
 
     function drawCanvas(){
@@ -58,6 +59,7 @@
       hero1.draw();
       hero2.draw();
       hero3.draw();
+      hero4.draw();
     }
 
     //Sonic1
@@ -68,12 +70,15 @@
       if((hero1.x > cvs.width - hero1.width) || (hero1.x + hero1.width < 0 && dir < 0)){
         dir *= -1;
         hero1.flipHorizontal();
+       hero2.hidden = !hero2.hidden;
+        hero3.hidden = !hero3.hidden;
       }
     }
 
     //Sonic2
     let dir2 = 1; // 1 = right, -1 = left
     function animate2(){
+      if (hero2.hidden) return;
       hero2.x+=10 * dir2;
       console.log(hero2.x);
       if((hero2.x > cvs.width - hero2.width) || (hero2.x + hero2.width < 0 && dir2 < 0)){
@@ -84,6 +89,7 @@
 //Sonic3
     let dir3 = 1; // 1 = right, -1 = left
     function animate3(){
+      if (hero3.hidden) return;
       hero3.x+=10 * dir3;
       console.log(hero3.x);
       if((hero3.x > cvs.width - hero3.width) || (hero3.x + hero3.width < 0 && dir3 < 0)){
@@ -91,6 +97,7 @@
         hero3.flipHorizontal();
       }
     }
+    
     //Functions
     function sheetLoaded(){
       console.log("Sheet Loaded");
@@ -100,16 +107,37 @@
       hero1.rotation = 45;
       hero2.animationSpeed = 1000;
       hero2.rotation = 0;
+      hero2.hidden = true;
       hero3.animationSpeed = 50;
       hero3.rotation = 90;
+      hero3.hidden = true;
+      hero4.animationSpeed = 15;
+
       //Start animation
       setInterval(animate, 20);
       setInterval(animate2, 5);
       setInterval(animate3, 40);
     }
 
+    function onKeyDown(aEvent){
+      switch(aEvent.code){
+        case "ArrowUp":
+          hero4.y-=5;
+          break;
+          case "ArrowRight":
+            hero4.x+=5;
+            break;
+          case "ArrowDown":
+            hero4.y+=5;
+            break;
+          case "ArrowLeft":
+            hero4.x-=5;
+            break;
+      }
+    }
 
     //Main application
     spcvs.loadSpriteImage("sonic_sprite_sheet.png", sheetLoaded);
+    document.addEventListener("keydown", onKeyDown)
   </script>
 </html>
