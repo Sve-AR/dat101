@@ -3,7 +3,7 @@ import { printOut, newLine } from "../../common/script/utils.mjs";
 
 printOut("--- Part 1, 2, 3 ----------------------------------------------------------------------------------------");
 
-let Timer = 7;
+let Timer = 6;
 if (Timer === 7) {
   printOut("Timer went off at 7")  
   printOut("I can take the bus to school.");
