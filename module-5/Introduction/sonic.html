@@ -13,47 +13,103 @@
         user-select: none; /* Standard syntax */
       }
     </style>
+    <!-- Import map: map the bare specifier "three" to the local module build. -->
+    <script type="importmap">
+      {
+        "imports": {
+          "libSprite": "../../common/script/libSprite.mjs",
+          "lib2d": "../../common/script/lib2d.mjs"
+        }
+      }
+    </script>
   </head>
   <body class="prevent-select">
-    <canvas id="cvs" style="background-color: antiquewhite" width="1024" height="512"></canvas>
+    <canvas id="cvs" style="background-color: rgb(206, 234, 225)" width="1024" height="512"></canvas>
   </body>
-  <script defer>
+  <script type="module" defer>
+    // Import libraries
+    import {TSpriteCanvas, TSprite } from "libSprite";
 
-"CODE HERE___________________________________________________________________________"
-
-const cvs = document.getElementById("cvs");
-const ctx = cvs.getContext("2d");
-const sonicPath = "sonic_sprite_sheet.png";
-const sonicSheet = new Image ();
-const SonicRunning1 = {x: 0, y: 127, width: 102, height: 121, count: 9}
-let frameNumber = 0;
-let posX = 0;
-let hero = SonicRunning1;
-
-function animate(){
-  ctx.clearRect(0, 0, cvs.width, cvs.height);
-  const dx = 0, dy = 100, dw = hero.width, dh = hero.height
-  const sx = frameNumber * hero.width, sy = hero, sw = hero.width, sh = hero.height;
-  ctx.drawImage(sonicSheet, sx, sy, sw, sh, dx + posX, dy, dw, dh);
+      // prettier-ignore
+  const SpriteInfoList = {
+    sonic1: { x: 0, y:   0, width: 102, height: 125, count: 6},
+    sonic2: { x: 0, y: 125, width: 102, height: 125, count: 9},
+    sonic3: { x: 0, y: 250, width: 102, height: 125, count: 9},
+    sonic4: { x: 0, y: 375, width: 102, height:  75, count: 7},
+    sonic5: { x: 0, y: 450, width: 100, height: 130, count: 5},
+    sonic6: { x: 0, y: 575, width: 102, height: 125, count: 3},
+    sonic7: { x: 0, y: 700, width: 102, height: 125, count: 2},
+    sonic8: { x: 0, y: 825, width: 102, height: 125, count: 2},
+    sonic9: { x: 0, y: 950, width: 102, height: 125, count: 4}
   }
-  
-  if(posX < csv.width - hero.width){
-    frameNumber++;
-    if(frameNumber >= hero.count){
-    frameNumber = 0;
-  }
-  posX += 15;
-  else{
-    posX = cvs.width - SonicRunning1.width;
-    }}
-  
-function sonicSheetLoaded(){
-  console.log("Sprite Sheet Loaded!");
-  setInterval(animate, 0.001);
-}
+    
+    //Global variables
+    const cvs = document.getElementById("cvs");
+    const ctx = cvs.getContext("2d");
+    const spcvs = new TSpriteCanvas(cvs);
+    const hero1 = new TSprite(spcvs, SpriteInfoList.sonic2, 0, 50);
+    const hero2 = new TSprite(spcvs, SpriteInfoList.sonic4, 0, 200);
+    const hero3 = new TSprite(spcvs, SpriteInfoList.sonic1, 0, 350);
 
-sonicSheet.addEventListener("load", sonicSheetLoaded);
-sonicSheet.src = sonicPath;
 
+    function drawCanvas(){
+      // This is a high performance function
+      // Do not do any heavy calculation here
+      hero1.draw();
+      hero2.draw();
+      hero3.draw();
+    }
+
+    //Sonic1
+    let dir = 1; // 1 = right, -1 = left
+    function animate(){
+      hero1.x+=10 * dir;
+      console.log(hero1.x);
+      if((hero1.x > cvs.width - hero1.width) || (hero1.x + hero1.width < 0 && dir < 0)){
+        dir *= -1;
+        hero1.flipHorizontal();
+      }
+    }
+
+    //Sonic2
+    let dir2 = 1; // 1 = right, -1 = left
+    function animate2(){
+      hero2.x+=10 * dir2;
+      console.log(hero2.x);
+      if((hero2.x > cvs.width - hero2.width) || (hero2.x + hero2.width < 0 && dir2 < 0)){
+        dir2 *= -1;
+        hero2.flipHorizontal();
+      }
+    }
+//Sonic3
+    let dir3 = 1; // 1 = right, -1 = left
+    function animate3(){
+      hero3.x+=10 * dir3;
+      console.log(hero3.x);
+      if((hero3.x > cvs.width - hero3.width) || (hero3.x + hero3.width < 0 && dir3 < 0)){
+        dir3 *= -1;
+        hero3.flipHorizontal();
+      }
+    }
+    //Functions
+    function sheetLoaded(){
+      console.log("Sheet Loaded");
+      spcvs.showFramerate = true;
+      spcvs.onDraw = drawCanvas;
+      hero1.animationSpeed = 100;
+      hero1.rotation = 0;
+      hero2.animationSpeed = 400;
+      hero2.rotation = 45;
+      hero3.animationSpeed = 50;
+      hero3.rotation = 90;
+      //Start animation
+      setInterval(animate, 20);
+      setInterval(animate2, 20);
+      setInterval(animate3, 20);
+    }
+
+
+    //Main application
+    spcvs.loadSpriteImage("sonic_sprite_sheet.png", sheetLoaded);
   </script>
 </html>
