@@ -9,8 +9,20 @@ export class TBackground{
         this.#spritGround = new TSprite(aSpcvs, aSPI.ground, 0 , 425);
     }
 
-    draw(){
+    drawBackground(){
         this.#spriteBackground.draw();
+    }
+
+    drawGround(){
         this.#spritGround.draw();
+    }
+
+    animate(){
+        const x = this.#spritGround.x + (this.#spritGround.width / 2);
+        if(x < 5){
+            this.#spritGround.x = 0;
+        }else{
+            this.#spritGround.x--;
+        }
     }
 }

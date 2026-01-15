@@ -6,7 +6,7 @@ export class THero extends TSprite{
     #speed;
     constructor(aSpcvs, aSPI){
         super(aSpcvs, aSPI, 100, 200);
-        this.animationSpeed = 25;
+        this.animationSpeed = 100;
         this.#gravity = 9.81 / 100;
         this.#speed = 0;
     }
