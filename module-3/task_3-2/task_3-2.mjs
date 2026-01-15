@@ -46,22 +46,23 @@ printOut("Tid " + taken + "ms");
 printOut(newLine);
 
 printOut("--- Part 4 ----------------------------------------------------------------------------------------------");
-let textPart4Primes = ""; // Prime numbers here
-for (let i = 1; i < 200; i++) {
-  let j = i - 1;
-  let isPrime = true; // i = prime
-  while (j > 1 && isPrime) {
-    // Check divisors from i-1 down to 2
-    let rest = i % j; // Remainder of i divided by j
-    isPrime = rest != 0; // If remainder is 0, i is not prime
-    j--; // Decrease divisor
+
+for (let number = 2; number < 200; number++) {
+  let isPrime = true;
+
+  for (let i = 2; i < number; i++) {
+    if (number % i === 0) { //If remainder is 0, the number divides evenly, means number is not prime
+      isPrime = false;
+      break;
+    }
   }
+
   if (isPrime) {
-    // If i is prime, add it to the list
-    textPart4Primes += " " + i; // Add prime number to the list
+    printOut(number);
   }
 }
-printOut(textPart4Primes); // Print all prime numbers found
+
+//printOut(isPrime); // Print all prime numbers found
 printOut(newLine);
 
 printOut("--- Part 5 ----------------------------------------------------------------------------------------------");
