@@ -1,5 +1,6 @@
 "use strict";
 import { TSprite } from "libSprite";
+import{ hero, EGameStatus } from "./FlappyBird.mjs"; // K!!! imports "hero" so it can be used in "obstacle" file and the status of the whole game
 
 const EasyFlyerGap = 150;
 const HardFlyerGap = 100;
@@ -48,6 +49,14 @@ export class TObstacle{
   animate(){
     this.#spDown.x--;
     this.#spUp.x--;
+    let hasCollided = hero.hasCollided(this.#spDown) || hero.hasCollided(this.#spUp); //K!!! Checks if the hero has collided with a obstacle (|| = opt 7)
+
+    if(hasCollided){
+      console.log("Collision"); //K!!! tells if the collision is registered by the program
+      EGameStatus.state = EGameStatus.heroIsDead; //K!!! Status has changed from playing to hero is dead
+      hero.animationSpeed = 0; //K!!! Hero stops animation when dead
+      hero.flap(); //K!!! Last flap of death
+    }
   }
 
 }// End of class TObstacle

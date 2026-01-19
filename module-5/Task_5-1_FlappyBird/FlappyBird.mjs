@@ -4,6 +4,7 @@ import { TSpriteCanvas } from "libSprite";
 import { TBackground } from "./background.js";
 import { THero } from "./hero.js";
 import { TObstacle } from "./obstacle.js";
+import { TBait } from "./bait.js";//K!!! REMEMBER
 
 //--------------- Objects and Variables ----------------------------------//
 const chkMuteSound = document.getElementById("chkMuteSound");
@@ -29,13 +30,21 @@ const SpriteInfoList = {
   medal:        { x: 985 , y: 635 , width: 44   , height: 44  , count: 4  },
 };
 
-const EGameStatus = { idle: 0 };
+export const EGameStatus = { idle: 0, gaming: 1, heroIsDead: 2, gameOver: 3, //K!!! different states of the game
+  state: 1};
 const background = new TBackground(spcvs, SpriteInfoList);
-const hero = new THero(spcvs, SpriteInfoList.hero2);
+export const hero = new THero(spcvs, SpriteInfoList.hero2); // K!!! exports the hero out so it can be imported in other files
 const obstacles = [];
+const baits = []; //K!!! Lets bait be used
 
 
 //--------------- Functions ----------------------------------------------//
+
+function spawnBait(){ //K!!! Spawns the butterflies
+  const bait = new TBait(spcvs, SpriteInfoList.food);
+  baits.push(bait);
+  setTimeout(spawnBait, 500); //K!!! How often the butterflies appear
+}
 
 function spawnObstacle(){
   const obstacle = new TObstacle(spcvs, SpriteInfoList.obstacle);
@@ -47,26 +56,38 @@ function spawnObstacle(){
 
 function animateGame(){
   hero.animate();
-  background.animate();
-  let deleteObstacle = false;
-  for(let i = 0; i < obstacles.length; i++){
-    const obstacle = obstacles[i];
-    obstacle.animate();
-    if (obstacle.x < -52){
-      deleteObstacle = true;
-    }
+  for(let i = 0; i < baits.length; i++){//K!!! Animate the butterfly so it keeps flying after the hero dies
+    const bait = baits[i];
+    bait.animate();
   }
-  if (deleteObstacle){
-    obstacles.splice(0, 1);
+  if(EGameStatus.state === EGameStatus.gaming){ //K!!! Only runs when the game is running
+    background.animate();
+    let deleteObstacle = false;
+    for(let i = 0; i < obstacles.length; i++){
+      const obstacle = obstacles[i];
+      obstacle.animate();
+      if (obstacle.x < -52){
+        deleteObstacle = true;
+      }
+    }
+    if (deleteObstacle){
+      obstacles.splice(0, 1);
+    }
   }
 }
 
 function drawGame(){
   background.drawBackground();
-  hero.draw();
+  for(let i = 0; i < baits.length; i++){//K!!! Makes the butterfly move on screen
+    const bait = baits [i];
+    bait.draw();//K!!! Makes them appear on screen
+  }
+
   for(let i = 0; i < obstacles.length; i++){
     const obstacle = obstacles[i];
-    obstacle.draw();}
+    obstacle.draw();
+  }
+  hero.draw();//K!!! Moved the hero in front of the pipes
   background.drawGround();
 }
 
@@ -83,6 +104,7 @@ function loadGame() {
   //Start animate engine
   setInterval(animateGame, 10);
   setTimeout(spawnObstacle, 1000);
+  setTimeout(spawnBait, 1000); //K!!! Makes the butterfly appear after 1 sec after game start
 } // end of loadGame
 
 
@@ -90,7 +112,9 @@ function onKeyDown(aEvent) {
   switch (aEvent.code) {
     case "Space":
       console.log("Space key pressed, flap the hero!");
+      if(EGameStatus.state !== EGameStatus.heroIsDead){ //K!!! Stops hero from moving after death
       hero.flap();
+      }
       break;
   }
 } // end of onKeyDown
