@@ -5,6 +5,7 @@ import { TBackground } from "./background.js";
 import { THero } from "./hero.js";
 import { TObstacle } from "./obstacle.js";
 import { TBait } from "./bait.js";//K!!! REMEMBER
+import { TMenu } from "./menu.js";
 
 //--------------- Objects and Variables ----------------------------------//
 const chkMuteSound = document.getElementById("chkMuteSound");
@@ -31,35 +32,58 @@ const SpriteInfoList = {
 };
 
 export const EGameStatus = { idle: 0, gaming: 1, heroIsDead: 2, gameOver: 3, //K!!! different states of the game
-  state: 1};
+  state: 0};
 const background = new TBackground(spcvs, SpriteInfoList);
 export const hero = new THero(spcvs, SpriteInfoList.hero2); // K!!! exports the hero out so it can be imported in other files
 const obstacles = [];
 const baits = []; //K!!! Lets bait be used
+const menu = new TMenu(spcvs, SpriteInfoList);
 
 
 //--------------- Functions ----------------------------------------------//
 
+
+export function startGame(){
+  EGameStatus.state = EGameStatus.gaming;
+  setTimeout(spawnObstacle, 1000);
+  setTimeout(spawnBait, 1000);
+}
+
 function spawnBait(){ //K!!! Spawns the butterflies
-  const bait = new TBait(spcvs, SpriteInfoList.food);
-  baits.push(bait);
-  setTimeout(spawnBait, 500); //K!!! How often the butterflies appear
+  if(EGameStatus.state === EGameStatus.gaming){
+    const bait = new TBait(spcvs, SpriteInfoList.food);
+    baits.push(bait);
+    const nextTime = Math.ceil(Math.random() * 2) + 1;
+    setTimeout(spawnBait, nextTime * 2000);
+  }
 }
 
 function spawnObstacle(){
-  const obstacle = new TObstacle(spcvs, SpriteInfoList.obstacle);
-  obstacles.push(obstacle);
-  const nextTime = Math.ceil(Math.random() * 1) + 1;
-  setTimeout(spawnObstacle, nextTime * 1000);
+  if(EGameStatus.state === EGameStatus.gaming){
+    const obstacle = new TObstacle(spcvs, SpriteInfoList.obstacle);
+    obstacles.push(obstacle);
+    const nextTime = Math.ceil(Math.random() * 1) + 1;
+    setTimeout(spawnObstacle, nextTime * 1000);
+  }
 }
 
 
 function animateGame(){
   hero.animate();
+  let eaten = -1;
   for(let i = 0; i < baits.length; i++){//K!!! Animate the butterfly so it keeps flying after the hero dies
     const bait = baits[i];
     bait.animate();
+    if(bait.distanceTo(hero.center) < 20){
+      eaten = i;
+    }
   }
+
+  if(eaten >= 0){
+    console.log("Eaten");
+    baits.splice(eaten, 1);
+  }
+
   if(EGameStatus.state === EGameStatus.gaming){ //K!!! Only runs when the game is running
     background.animate();
     let deleteObstacle = false;
@@ -89,6 +113,8 @@ function drawGame(){
   }
   hero.draw();//K!!! Moved the hero in front of the pipes
   background.drawGround();
+  menu.draw();
+
 }
 
 
@@ -103,8 +129,6 @@ function loadGame() {
 
   //Start animate engine
   setInterval(animateGame, 10);
-  setTimeout(spawnObstacle, 1000);
-  setTimeout(spawnBait, 1000); //K!!! Makes the butterfly appear after 1 sec after game start
 } // end of loadGame
 
 
