@@ -2,6 +2,7 @@
 
 import { TSprite, TSpriteButton } from "libSprite";
 import { startGame } from "./FlappyBird.mjs";
+import { TBait } from "./bait.js";
 
 export class TMenu{
     #spTitle;
@@ -19,7 +20,7 @@ export class TMenu{
     spPlayBtnClick(){
         console.log("Click");
         this.#spPlayBtn.hidden = true;
+        this.#spTitle.hidden = true;
         startGame();
     }
-
 }
