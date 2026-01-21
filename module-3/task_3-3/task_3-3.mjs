@@ -117,26 +117,148 @@ printOut(newLine);
 
 printOut("--- Part 6 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
-printOut("Replace this with you answer!");
+function TaxCalculation(aGrossAmount, aTaxGroup) {
+  const taxGroup = aTaxGroup.toLowerCase();
+  let taxRate = 0;
+  switch (taxGroup) {
+    case "normal":
+      taxRate = 25;
+      break;
+    case "food":
+      taxRate = 15;
+      break;
+    case "hotel":
+    case "transport":
+    case "cinema":
+      taxRate = 10;
+      break;
+    default:
+      printOut("Error: Unknown tax group!");
+      return;
+  }
+  const netAmount = (100 * aGrossAmount) / (taxRate + 100);
+  printOut(`Gross amount: ${aGrossAmount.toFixed(2)}`);
+  printOut(`Tax group: ${aTaxGroup}, Tax rate: ${taxRate}%`);
+  printOut(`Net amount: ${netAmount.toFixed(2)}`);
+  printOut("");
+}
+
+TaxCalculation(100, "Normal");
+TaxCalculation(100, "Food");
+TaxCalculation(100, "Hotel");
+TaxCalculation(100, "Transport");
+TaxCalculation(100, "Cinema");
+TaxCalculation(100, "Car");
 printOut(newLine);
 
 printOut("--- Part 7 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
-printOut("Replace this with you answer!");
+
+function CalculateSpeedDistanceTime(aDistance, aTime, aSpeed) {
+  if (aSpeed === null) {
+    // Calculate speed
+    if( !aTime || aTime === 0 || !aDistance ) {
+      printOut("Error: Time or Distance cannot be zero or null when calculating speed!");
+      return NaN;
+    }
+    aSpeed = aDistance / aTime;
+    printOut(`Calculated Speed: ${aSpeed.toFixed(2)} units/time`);
+    return aSpeed;
+  } else if (aTime === null) {
+    // Calculate time
+    if( !aSpeed || aSpeed === 0 || !aDistance ) {
+      printOut("Error: Speed or Distance cannot be zero or null when calculating time!");
+      return NaN;
+    }
+    aTime = aDistance / aSpeed;
+    printOut(`Calculated Time: ${aTime.toFixed(2)} time units`);
+    return aTime;
+  } else if (aDistance === null) {
+    // Calculate distance
+    if( !aSpeed || !aTime) {
+      printOut("Error: Speed or Time cannot be null when calculating distance!");
+      return NaN;
+    }
+    aDistance = aSpeed * aTime;
+    printOut(`Calculated Distance: ${aDistance.toFixed(2)} units`);
+    return aDistance;
+  }
+}
+CalculateSpeedDistanceTime(100, 2, null); // Calculate speed
+CalculateSpeedDistanceTime(100, null, 50); // Calculate time
+CalculateSpeedDistanceTime(null, 2, 50); // Calculate distance
+CalculateSpeedDistanceTime(null, null, 50); // Error case
 printOut(newLine);
 
 printOut("--- Part 8 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
-printOut("Replace this with you answer!");
+
+printOut(newLine);
+function AdjustString(aText, aMaxSize, aChar, aInsertAtEnd) {
+  let adjustedText = aText;
+  let length = aText.length;
+  while (length < aMaxSize) {
+    if (aInsertAtEnd) {
+      adjustedText += aChar;
+    } else {
+      adjustedText = aChar + adjustedText;
+    }
+    length++;
+  }
+  printOut(`Adjusted String: "${adjustedText}"`);
+  return adjustedText;
+}
+AdjustString("Hello", 30, "*", true); // Insert at end
+AdjustString("World", 25, "#", false); // Insert at beginning
+AdjustString("This is a right aligned text.", 50, "&nbsp;", false); // Right align with spaces
 printOut(newLine);
 
 printOut("--- Part 9 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
-printOut("Replace this with you answer!");
+
+printOut(newLine);
+function TestMath(aLines) {
+  let currentNumber = 1;
+  for (let line = 1; line <= aLines; line++) {
+    let leftSum = 0;
+    let rightSum = 0;
+    // Calculate left side, one more number than right side
+    for (let i = 0; i < line + 1; i++) {
+      leftSum += currentNumber++;
+    }
+    // Calculate right side
+    for (let i = 0; i < line; i++) {
+      rightSum += currentNumber++;
+    }
+    if (leftSum !== rightSum) {
+      printOut(`Test failed at line ${line}: Left sum (${leftSum}) != Right sum (${rightSum})`);
+      return;
+    }
+  }
+  printOut("Math = fun!");
+}
+
+TestMath(200);
 printOut(newLine);
 
 /* Task 10*/
 printOut("--- Part 10 ---------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
-printOut("Replace this with you answer!");
+
+let Part10IntermediateSteps = "";
+let Part10Step = 0;
+function Part10Factorial(aNumber) {
+  if (aNumber <= 1) {
+    return 1;
+  } else {
+    const result = aNumber * Part10Factorial(aNumber - 1);
+    Part10Step++;
+    Part10IntermediateSteps += `Step ${Part10Step}: ${aNumber} * Factorial(${aNumber - 1}) = ${result}<br>`;
+    return result;
+  }
+}
+const numberForFactorial = 5;
+const factorialResult = Part10Factorial(numberForFactorial);
+printOut(`Factorial of ${numberForFactorial} is ${factorialResult}`);
+printOut("Intermediate Steps:<br>" + Part10IntermediateSteps);
 printOut(newLine);
