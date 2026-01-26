@@ -31,13 +31,13 @@ const SpriteInfoList = {
   medal:        { x: 985 , y: 635 , width: 44   , height: 44  , count: 4  },
 };
 
-export const EGameStatus = { idle: 0, gaming: 1, heroIsDead: 2, gameOver: 3, //K!!! different states of the game
+export const EGameStatus = { idle: 0, countDown: 1, gaming: 2, heroIsDead: 3, gameOver: 4, //K!!! different states of the game
   state: 0};
 const background = new TBackground(spcvs, SpriteInfoList);
 export const hero = new THero(spcvs, SpriteInfoList.hero2); // K!!! exports the hero out so it can be imported in other files
 const obstacles = [];
 const baits = []; //K!!! Lets bait be used
-const menu = new TMenu(spcvs, SpriteInfoList);
+export const menu = new TMenu(spcvs, SpriteInfoList);
 
 
 //--------------- Functions ----------------------------------------------//
@@ -48,6 +48,8 @@ export function startGame(){
   setTimeout(spawnObstacle, 1000);
   setTimeout(spawnBait, 1000);
 }
+
+
 
 function spawnBait(){ //K!!! Spawns the butterflies
   if(EGameStatus.state === EGameStatus.gaming){
@@ -82,6 +84,7 @@ function animateGame(){
   if(eaten >= 0){
     console.log("Eaten");
     baits.splice(eaten, 1);
+    hero.eat();
   }
 
   if(EGameStatus.state === EGameStatus.gaming){ //K!!! Only runs when the game is running
