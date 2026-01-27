@@ -3,7 +3,6 @@
 import { TSprite, TSpriteButton, TSpriteNumber } from "libSprite"; //K!!! add TSpriteNumber
 import { startGame } from "./FlappyBird.mjs";
 import { TSoundFile } from "libSound"; //K!!!
-import { TBait } from "./bait.js";
 
 const fnCountDown = "./Media/countDown.mp3"//K!!!
 const fnRunning = "./Media/running.mp3"//K!!! 
@@ -14,16 +13,23 @@ export class TMenu{
     #spCountDown;//K!!!
     #sfCountDown;//K!!!
     #sfRunning;//K!!!
+    #spGameScore;
     constructor(aSpcvs, aSPI){
         this.#spTitle = new TSprite(aSpcvs, aSPI.flappyBird, 200, 100);
         this.#spPlayBtn = new TSpriteButton(aSpcvs, aSPI.buttonPlay, 240, 180);
-        this.#spCountDown = new TSpriteNumber(aSpcvs, aSPI.numberBig, 280, 190); //K!!!
+        this.#spCountDown = new TSpriteNumber(aSpcvs, aSPI.numberBig, 280, 190);//K!!!
         this.#spPlayBtn.addEventListener("click", this.spPlayBtnClick.bind(this));
         this.#spCountDown.visible = false;//K!!!
         this.#sfCountDown = null;//K!!!
         this.#sfRunning = null;//K!!!
+        this.#spGameScore = new TSpriteNumber(aSpcvs, aSPI.numberSmall, 10, 10);//K!!!
+        this.#spGameScore.alpha = 0.5;//K!!!
     }
-    
+
+    incGameScore(aScore){
+        this.#spGameScore.value += aScore;
+    }
+
     stopSound(){
         this.#sfRunning.stop();
     }
@@ -32,6 +38,7 @@ export class TMenu{
         this.#spTitle.draw();
         this.#spPlayBtn.draw();
         this.#spCountDown.draw(); //K!!!
+        this.#spGameScore.draw(); //K!!!
     }
 
     countDown(){ //K!!!

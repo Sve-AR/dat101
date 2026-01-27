@@ -4,7 +4,7 @@ import { TSpriteCanvas } from "libSprite";
 import { TBackground } from "./background.js";
 import { THero } from "./hero.js";
 import { TObstacle } from "./obstacle.js";
-import { TBait } from "./bait.js";//K!!! REMEMBER
+import { TBait } from "./bait.js";
 import { TMenu } from "./menu.js";
 
 //--------------- Objects and Variables ----------------------------------//
@@ -31,13 +31,15 @@ const SpriteInfoList = {
   medal:        { x: 985 , y: 635 , width: 44   , height: 44  , count: 4  },
 };
 
-export const EGameStatus = { idle: 0, countDown: 1, gaming: 2, heroIsDead: 3, gameOver: 4, //K!!! different states of the game
+export const EGameStatus = { idle: 0, countDown: 1, gaming: 2, heroIsDead: 3, gameOver: 4,
   state: 0};
 const background = new TBackground(spcvs, SpriteInfoList);
-export const hero = new THero(spcvs, SpriteInfoList.hero2); // K!!! exports the hero out so it can be imported in other files
+export const hero = new THero(spcvs, SpriteInfoList.hero2);
 const obstacles = [];
-const baits = []; //K!!! Lets bait be used
+const baits = [];
 export const menu = new TMenu(spcvs, SpriteInfoList);
+let obstaclePassed = false;
+let baitEaten = false;
 
 
 //--------------- Functions ----------------------------------------------//
@@ -51,7 +53,7 @@ export function startGame(){
 
 
 
-function spawnBait(){ //K!!! Spawns the butterflies
+function spawnBait(){
   if(EGameStatus.state === EGameStatus.gaming){
     const bait = new TBait(spcvs, SpriteInfoList.food);
     baits.push(bait);
@@ -73,7 +75,7 @@ function spawnObstacle(){
 function animateGame(){
   hero.animate();
   let eaten = -1;
-  for(let i = 0; i < baits.length; i++){//K!!! Animate the butterfly so it keeps flying after the hero dies
+  for(let i = 0; i < baits.length; i++){
     const bait = baits[i];
     bait.animate();
     if(bait.distanceTo(hero.center) < 20){
@@ -83,11 +85,17 @@ function animateGame(){
 
   if(eaten >= 0){
     console.log("Eaten");
+    if(!baitEaten){
+      menu.incGameScore(5);
+      baitEaten = true;
+    }
     baits.splice(eaten, 1);
     hero.eat();
+  }else{
+    baitEaten = false;
   }
 
-  if(EGameStatus.state === EGameStatus.gaming){ //K!!! Only runs when the game is running
+  if(EGameStatus.state === EGameStatus.gaming){
     background.animate();
     let deleteObstacle = false;
     for(let i = 0; i < obstacles.length; i++){
@@ -95,6 +103,12 @@ function animateGame(){
       obstacle.animate();
       if (obstacle.x < -52){
         deleteObstacle = true;
+        obstaclePassed = false;//K!!!
+      }else if((obstacle.x + obstacle.width) < hero.x){ //K!!! =>
+        if(!obstaclePassed){
+          obstaclePassed = true;
+          menu.incGameScore(1);
+        } //K!!! <=
       }
     }
     if (deleteObstacle){
@@ -105,16 +119,16 @@ function animateGame(){
 
 function drawGame(){
   background.drawBackground();
-  for(let i = 0; i < baits.length; i++){//K!!! Makes the butterfly move on screen
+  for(let i = 0; i < baits.length; i++){
     const bait = baits [i];
-    bait.draw();//K!!! Makes them appear on screen
+    bait.draw();
   }
 
   for(let i = 0; i < obstacles.length; i++){
     const obstacle = obstacles[i];
     obstacle.draw();
   }
-  hero.draw();//K!!! Moved the hero in front of the pipes
+  hero.draw();
   background.drawGround();
   menu.draw();
 
@@ -139,7 +153,7 @@ function onKeyDown(aEvent) {
   switch (aEvent.code) {
     case "Space":
       console.log("Space key pressed, flap the hero!");
-      if(EGameStatus.state !== EGameStatus.heroIsDead){ //K!!! Stops hero from moving after death
+      if(EGameStatus.state !== EGameStatus.heroIsDead){
       hero.flap();
       }
       break;

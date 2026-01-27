@@ -48,9 +48,9 @@ export class THero extends TSprite{
         }
       }
       else{
-        EGameStatus.state = EGameStatus.gameOver; //K!!! stops the game when collision happens
+        EGameStatus.state = EGameStatus.gameOver;
         menu.stopSound();
-        this.animationSpeed = 0; //K!!! stops the hero from moving when dead
+        this.animationSpeed = 0;
         this.#sfGameOver = new TSoundFile(fnGameOver);
         this.#sfGameOver.play();
       }
