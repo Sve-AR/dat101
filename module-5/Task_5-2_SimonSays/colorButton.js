@@ -6,4 +6,4 @@ export class TColorButton extends TSpriteButton{
     constructor(aSpcvs, aSPI){
         super(aSpcvs, aSPI.dst.x, aSPI.dst.y);
     }
-}
+} 

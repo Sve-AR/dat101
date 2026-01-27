@@ -8,7 +8,10 @@ export class TGameBoard extends TSprite{
     constructor(aSpcvs, aSPI){
         super(aSpcvs, aSPI.Background, 0, 0);
         this.#colorButtons = [
-            new TColorButton(aSpcvs, aSPI.ButtonRed)
+            new TColorButton(aSpcvs, aSPI.ButtonRed),
+            new TColorButton(aSpcvs, aSPI.ButtonGreen),
+            new TColorButton(aSpcvs, aSPI.ButtonBlue),
+            new TColorButton(aSpcvs, aSPI.ButtonYellow)
         ];
     }
 
