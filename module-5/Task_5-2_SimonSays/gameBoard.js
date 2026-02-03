@@ -4,7 +4,6 @@ import { TPoint } from "lib2d";
 import { TSprite, TSpriteButton } from "libSprite";
 import { TColorButton } from "./colorButton.js";
 import { TCircle } from "lib2d";
-import { TSoundWave } from "sound.js";
 import { activateAudioContext } from "libSound";
 
 export class TGameBoard extends TSprite{
@@ -52,12 +51,12 @@ export class TGameBoard extends TSprite{
         this.#gameInfo.disabled = true;
         this.#gameInfo.hidden = true;
         this.#disableColorButtons(false);
-        if(this.#isSoundEnabled = false){
-            activateAudioContext;
+        if(this.#isSoundEnabled === false){
+            activateAudioContext();
             this.#isSoundEnabled = true;
             for(let i = 0; i < this.#colorButtons.length; i++){
                 const colorButton = this.#colorButtons[i];
-                colorButton.createSound()
+                colorButton.createSound(i)
             }
         }
     }

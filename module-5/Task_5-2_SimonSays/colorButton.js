@@ -30,14 +30,12 @@ export class TColorButton extends TSpriteButton{
       }
     }
     onMouseDown(){
-        //No need to call super
         this.index = 1;
         if(this.#sound){
             this.#sound.play();
         }
     }
     onMouseUp(){
-        //No need to call super
         this.index = 0;
         if(this.#sound){
             this.#sound.stop();
@@ -45,6 +43,18 @@ export class TColorButton extends TSpriteButton{
     }
 
     createSound(aIndex){
-        this.#sound = new TSoundWave(EOctave.Octave5, ENoteName.C, )
+        let note = ENoteName.C;
+        switch(aIndex){
+            case 1:
+                note = ENoteName.F;
+                break;
+            case 2:
+                note = ENoteName.D;
+                break;
+            case 3:
+                note = ENoteName.E;
+                break;
+        }
+        this.#sound = new TSoundWave(EOctave.Octave6, note);
     }
 }
