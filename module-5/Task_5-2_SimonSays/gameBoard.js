@@ -1,10 +1,11 @@
 "use strict";
 
 import { TPoint } from "lib2d";
-import { TSprite, TSpriteButton } from "libSprite";
+import { ESpriteNumberJustifyType, TSprite, TSpriteButton, TSpriteNumber } from "libSprite";
 import { TColorButton } from "./colorButton.js";
 import { TCircle } from "lib2d";
 import { activateAudioContext } from "libSound";
+import { EGameStatusType, spawnColorButton } from "./SimonSays.mjs";
 
 export class TGameBoard extends TSprite{
     #colorButtons;
@@ -15,6 +16,7 @@ export class TGameBoard extends TSprite{
         const center = new TPoint(
             aSPI.Background.width/2,
             aSPI.Background.height/2);
+
         this.#colorButtons = [
             new TColorButton(aSpcvs, aSPI.ButtonRed, center),
             new TColorButton(aSpcvs, aSPI.ButtonBlue, center),
@@ -30,6 +32,20 @@ export class TGameBoard extends TSprite{
         this.#gameInfo.onClick = this.#gameInfoClick.bind(this);
         this.#disableColorButtons(true);
         this.#isSoundEnabled = false;
+        this.spRound = new TSpriteNumber(aSpcvs, aSPI.number, 405, 385);
+        this.spRound.justify = ESpriteNumberJustifyType.Right
+        this.spRound.value = 0;
+    }
+
+    get colorButtons(){
+        return this.#colorButtons;
+    }
+
+    gameOver(){
+        this.#disableColorButtons(true);
+        this.#gameInfo.index = 1;
+        this.#gameInfo.hidden = false;
+        this.#gameInfo.disabled = false;
     }
 
     draw(){
@@ -38,6 +54,7 @@ export class TGameBoard extends TSprite{
             const colorButton = this.#colorButtons[i];
             colorButton.draw();
         }
+        this.spRound.draw();
         this.#gameInfo.draw();
     }
 
@@ -56,8 +73,9 @@ export class TGameBoard extends TSprite{
             this.#isSoundEnabled = true;
             for(let i = 0; i < this.#colorButtons.length; i++){
                 const colorButton = this.#colorButtons[i];
-                colorButton.createSound(i)
+                colorButton.createSound(i);
             }
         }
+        spawnColorButton(); //This activates the sequence when we start
     }
 }
