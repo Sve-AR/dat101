@@ -2,7 +2,7 @@
 //--------------- Objects and Variables ----------------------------------//
 import { TSpriteCanvas } from "libSprite";
 import { TGameBoard } from "./gameBoard.js";//K!!!
-import { addRandomButton } from "./sequence.js";
+import { addRandomButton, resetSequence } from "./sequence.js";
 
 // prettier-ignore
 export const SpriteInfoList = {
@@ -50,6 +50,12 @@ function loadGame(){
 function drawGame() {
   // Always draw all game elements, just control their visibility with the visible property
   gameBoard.draw();
+}
+
+export function resetGame(){
+  gameBoard.spRound.value = 0;
+  resetSequence();
+  EGameStatusType.state = EGameStatusType.Idle;
 }
 
 

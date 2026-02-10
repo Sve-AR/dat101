@@ -160,9 +160,9 @@ function onKeyDown(aEvent) {
   }
 } // end of onKeyDown
 
-function setSoundOnOff(){
+function setSoundOnOff(checked){
   // Mute or unmute the game sound based on checkbox
-
+  
 } // end of setSoundOnOff
 
 function setDayNight(aEvent){ 

@@ -1,16 +1,17 @@
 "use strict";
 
-import { TPoint } from "lib2d";
+import { TPoint, TCircle } from "lib2d";
 import { ESpriteNumberJustifyType, TSprite, TSpriteButton, TSpriteNumber } from "libSprite";
 import { TColorButton } from "./colorButton.js";
-import { TCircle } from "lib2d";
+import { resetSequence } from "./sequence.js";
 import { activateAudioContext } from "libSound";
-import { EGameStatusType, spawnColorButton } from "./SimonSays.mjs";
+import { EGameStatusType, spawnColorButton, resetGame } from "./SimonSays.mjs";
 
 export class TGameBoard extends TSprite{
     #colorButtons;
     #gameInfo;
     #isSoundEnabled;
+    #spFinalScore;
     constructor(aSpcvs, aSPI){
         super(aSpcvs, aSPI.Background, 0, 0);
         const center = new TPoint(
@@ -35,17 +36,21 @@ export class TGameBoard extends TSprite{
         this.spRound = new TSpriteNumber(aSpcvs, aSPI.number, 405, 385);
         this.spRound.justify = ESpriteNumberJustifyType.Right
         this.spRound.value = 0;
+        this.#spFinalScore = new TSpriteNumber(aSpcvs, aSPI.number, 360, 440);
+        this.#spFinalScore.justify = ESpriteNumberJustifyType.Center;
+        this.#spFinalScore.visible = false;
     }
 
     get colorButtons(){
         return this.#colorButtons;
     }
-
     gameOver(){
         this.#disableColorButtons(true);
         this.#gameInfo.index = 1;
         this.#gameInfo.hidden = false;
         this.#gameInfo.disabled = false;
+        this.#spFinalScore.value = this.spRound.value;
+        this.#spFinalScore.visible = true;
     }
 
     draw(){
@@ -56,6 +61,7 @@ export class TGameBoard extends TSprite{
         }
         this.spRound.draw();
         this.#gameInfo.draw();
+        this.#spFinalScore.draw();
     }
 
     #disableColorButtons(aDisable){
@@ -76,6 +82,9 @@ export class TGameBoard extends TSprite{
                 colorButton.createSound(i);
             }
         }
+        this.#spFinalScore.visible = false;
+        resetGame();
+        resetSequence();
         spawnColorButton(); //This activates the sequence when we start
     }
 }
