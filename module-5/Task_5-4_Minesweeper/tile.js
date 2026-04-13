@@ -7,12 +7,16 @@ let tiles = [];
 
 export class TTile extends TSpriteButton {
   #mine;
+  #col;
+  #row;
   constructor(aSpcvs, aSPI, aCol, aRow) {
     const pos = new TPoint(20, 133);
     pos.x += aSPI.width * aCol;
     pos.y += aSPI.height * aRow;
     super(aSpcvs, aSPI, pos.x, pos.y);
     this.#mine = false;
+    this.#col = aCol;
+    this.#row = aRow;
   }
 
   get isMine() {
@@ -25,6 +29,16 @@ export class TTile extends TSpriteButton {
 
   get open() {
     return this.index === 2;
+  }
+
+  #getNeighbors(){
+    let colFrom = this.#col - 1;
+    let colTo = this.#col + 1;
+    let rowFrom = this.#row - 1;
+    let rowTo = this.#row + 1;
+    if(colFrom < 0){
+      colFrom = 0;
+    }
   }
 
   // Override functions
