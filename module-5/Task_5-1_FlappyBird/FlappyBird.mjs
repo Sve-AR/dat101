@@ -82,7 +82,7 @@ function animateGame(){
       eaten = i;
     }
   }
-
+  
   if(eaten >= 0){
     console.log("Eaten");
     if(!baitEaten){

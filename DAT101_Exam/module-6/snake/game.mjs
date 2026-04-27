@@ -5,7 +5,7 @@
 //-----------------------------------------------------------------------------------------
 import { TSpriteCanvas } from "libSprite";
 import { TGameBoard, GameBoardSize, TBoardCell } from "./gameBoard.js";
-import { TSnake, EDirection } from "./snake.js";
+import { TSnake, EDirection, TSnakeBody } from "./snake.js";
 import { TBait } from "./bait.js";
 
 //-----------------------------------------------------------------------------------------
@@ -37,7 +37,8 @@ export const GameProps = {
   gameBoard: null,
   gameStatus: EGameStatus.Idle,
   snake: null,
-  bait: null
+  bait: null,
+  draw: null
 };
 
 //------------------------------------------------------------------------------------------
@@ -51,12 +52,12 @@ export function newGame() {
   gameSpeed = 4; // Reset game speed
 }
 
-export function baitIsEaten() {
-
-  console.log("Bait eaten!");
-  /* Logic to increase the snake size and score when bait is eaten */
-
-  increaseGameSpeed(); // Increase game speed
+export function baitIsEaten(){
+  if(!GameProps.bait.update()){
+    !GameProps.snake.clone()
+    console.log("Bait is Eaten!"); /* Logic to increase the snake size and score when bait is eaten */
+    increaseGameSpeed(); // Increase game speed
+  }
 }
 
 
@@ -99,7 +100,7 @@ function updateGame() {
   // Update game logic here
   switch (GameProps.gameStatus) {
     case EGameStatus.Playing:
-
+    
       if (!GameProps.snake.update()) {
         GameProps.gameStatus = EGameStatus.GameOver;
         console.log("Game over!");
@@ -133,6 +134,15 @@ function onKeyDown(event) {
       GameProps.snake.setDirection(EDirection.Right);
       break;
     case " ":
+      GameProps.gameStatus = EGameStatus.Pause;
+      /*
+      if(GameProps.gameStatus = EGameStatus.Pause){
+        switch (event.key){
+          case "ArrowUp":
+            GameProps.gameStatus = EGameStatus.Playing;
+        }
+      }
+      */
       console.log("Space key pressed!");
       /* Pause the game logic here */
       

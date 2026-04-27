@@ -94,7 +94,7 @@ class TSnakeHead extends TSnakePart {
   }
 }
 
-class TSnakeBody extends TSnakePart {
+export class TSnakeBody extends TSnakePart {
   constructor(aSpriteCanvas, aBoardCell ) {
     super(aSpriteCanvas, SheetData.Body, aBoardCell);
     this.index = ESpriteIndex.RL;    
