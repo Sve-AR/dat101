@@ -219,6 +219,7 @@ export class TSnake {
   #head = null;
   #body = null;
   #tail = null;
+  #clonePart = null;
   constructor(aSpriteCanvas, aBoardCell) {
     this.#head = new TSnakeHead(aSpriteCanvas, aBoardCell);
     let col = aBoardCell.col - 1;
@@ -244,7 +245,13 @@ export class TSnake {
       for (let i = 0; i < this.#body.length; i++) {
         this.#body[i].update();
       }
-      this.#tail.update();  
+      if(this.#clonePart === null){
+        this.#tail.update();
+      }else{
+        this.#body.push(this.#clonePart);
+        this.#clonePart = null;
+      }//Holds and adds the tail only after a new body part is added
+        
     }else if(!this.#isDead){
       this.#isDead = true;
       return false; // Collision detected, do not continue
@@ -255,4 +262,8 @@ export class TSnake {
   setDirection(aDirection) {
     this.#head.setDirection(aDirection);
   } // setDirection
+
+  grow(){
+    this.#clonePart = this.#body[this.#body.length - 1].clone()//Clones the last body part of the snake´s body
+  }
 }

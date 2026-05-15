@@ -7,6 +7,7 @@ import { TSpriteCanvas } from "libSprite";
 import { TGameBoard, GameBoardSize, TBoardCell } from "./gameBoard.js";
 import { TSnake, EDirection, TSnakeBody } from "./snake.js";
 import { TBait } from "./bait.js";
+import { TMenu } from "./menu.js";
 
 //-----------------------------------------------------------------------------------------
 //----------- variables and object --------------------------------------------------------
@@ -15,6 +16,7 @@ const cvs = document.getElementById("cvs");
 const spcvs = new TSpriteCanvas(cvs);
 let gameSpeed = 4; // Game speed multiplier;
 let hndUpdateGame = null;
+let menu = null;
 export const EGameStatus = { Idle: 0, Playing: 1, Pause: 2, GameOver: 3 };
 
 
@@ -37,8 +39,7 @@ export const GameProps = {
   gameBoard: null,
   gameStatus: EGameStatus.Idle,
   snake: null,
-  bait: null,
-  draw: null
+  bait: null
 };
 
 //------------------------------------------------------------------------------------------
@@ -52,9 +53,10 @@ export function newGame() {
   gameSpeed = 4; // Reset game speed
 }
 
+
 export function baitIsEaten(){
-  if(!GameProps.bait.update()){
-    !GameProps.snake.clone()
+  if(!GameProps.bait.update()){ //Makes the apple move to a new tile
+    GameProps.snake.grow()//Calls on grow function from snake.js
     console.log("Bait is Eaten!"); /* Logic to increase the snake size and score when bait is eaten */
     increaseGameSpeed(); // Increase game speed
   }
@@ -71,7 +73,7 @@ function loadGame() {
 
   GameProps.gameStatus = EGameStatus.Playing; // change game status to Idle
 
-  /* Create the game menu here */ 
+  menu = new TMenu(spcvs, cvs); 
 
   newGame(); // Call this function from the menu to start a new game, remove this line when the menu is ready
 
@@ -90,8 +92,12 @@ function drawGame() {
     case EGameStatus.Pause:
       GameProps.bait.draw();
       GameProps.snake.draw();
+      //GameProps.Number.draw();
       break;
   }
+
+  menu.draw();
+  
   // Request the next frame
   requestAnimationFrame(drawGame);
 }
@@ -110,8 +116,10 @@ function updateGame() {
 }
 
 function increaseGameSpeed() {
-  /* Increase game speed logic here */
-  console.log("Increase game speed!");
+  gameSpeed += 0.5; //Increases speed slightly
+  console.log("Speed Increased:");
+  clearInterval(hndUpdateGame); //Stpps old interval
+  hndUpdateGame = setInterval(updateGame, 1000 / gameSpeed);//Starts new interval with higher speed
 }
 
 
@@ -134,23 +142,14 @@ function onKeyDown(event) {
       GameProps.snake.setDirection(EDirection.Right);
       break;
     case " ":
-      GameProps.gameStatus = EGameStatus.Pause;
-      /*
-      if(GameProps.gameStatus = EGameStatus.Pause){
-        switch (event.key){
-          case "ArrowUp":
-            GameProps.gameStatus = EGameStatus.Playing;
-        }
-      }
-      */
-      console.log("Space key pressed!");
-      /* Pause the game logic here */
-      
-      break;
-    default:
-      console.log(`Key pressed: "${event.key}"`);
+  if (GameProps.gameStatus === EGameStatus.Playing) {
+    GameProps.gameStatus = EGameStatus.Pause;
+    menu.showPause();
+  }
+  break;
   }
 }
+
 //-----------------------------------------------------------------------------------------
 //----------- main -----------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
