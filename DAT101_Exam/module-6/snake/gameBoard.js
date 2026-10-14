@@ -1,10 +1,7 @@
 "use strict";
 
 import { EDirection } from "./snake.js";
-
-
 export const GameBoardSize = { Cols: 24, Rows: 18 };
-
 export const EBoardCellInfoType = { Empty: 0, Snake: 1, Bait: 2 };
 
 export class TBoardCell {
