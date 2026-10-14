@@ -20,7 +20,7 @@ let menu = null;
 export const EGameStatus = { Idle: 0, Playing: 1, Pause: 2, GameOver: 3 };
 
 
-
+ 
 // prettier-ignore
 export const SheetData = {
   Head:     { x:   0, y:   0, width:  38, height:  38, count:  4 },

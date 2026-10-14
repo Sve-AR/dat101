@@ -14,7 +14,7 @@ export class TBoardCell {
   }
 }// End off class TBoardCell
 //------------------------------------------------------------------------------------------
-
+ 
 export class TBoardCellInfo {
   constructor() {
     this.direction = EDirection.Right;

@@ -16,7 +16,7 @@ export class TMenu {
       0,
       0
     );
-
+ 
     this.#resumeButton.visible = false;
     this.centerResumeButton(); // Will move the button to the center of the screen
     canvas.addEventListener("click", this.onClick.bind(this)); // Listen for mouse clicks on the canvas

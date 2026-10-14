@@ -6,7 +6,7 @@ import { TSprite } from "libSprite";
 import { TPoint } from "lib2d";
 import { GameProps, SheetData } from "./game.mjs";
 import { TBoardCell, EBoardCellInfoType } from "./gameBoard.js";
-
+ 
 //------------------------------------------------------------------------------------------
 //----------- Classes ---------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
